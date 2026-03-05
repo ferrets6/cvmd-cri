@@ -60,4 +60,28 @@ Good places to find themes: [jekyllthemes.io](https://jekyllthemes.io/github-pag
 python setup.py --prompt
 ```
 
+## Web editor (`edit.html`)
+
+The repo includes a browser-based Markdown editor (`edit.html`) that lets you update your CV without touching Git. It loads `README.md` directly from GitHub, lets you edit it with a live preview, and saves it back via the GitHub API (triggering the Action automatically).
+
+### Setup: create a GitHub Personal Access Token
+
+Go to *GitHub* → your profile photo → *Settings* → *Developer settings* → *Personal access tokens* → *Fine-grained tokens* → **Generate new token**:
+
+- **Resource owner:** your account
+- **Repository access:** Only select repositories → `cvmd-cri`
+- **Repository permissions → Contents:** `Read and write`
+
+Copy the token — you will only see it once.
+
+### Using the editor
+
+Open `https://<your-pages-url>/edit.html`. Paste the token when prompted and click **Entra**.
+
+The token is stored in `sessionStorage` for the duration of the browser session — you won't be asked again until you close the tab. It is never sent anywhere other than the GitHub API.
+
+### Local development
+
+Open `edit.html` directly in a browser (no server needed — all requests go to the external GitHub API).
+
 That's it, see ya! 👋
