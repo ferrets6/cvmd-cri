@@ -147,6 +147,11 @@ function updatePreview() {
   if (!previewVisible) return;
   const md = document.getElementById('markdown-input').value;
   document.getElementById('preview-content').innerHTML = marked.parse(md);
+  if (previewPhotoUrl) {
+    document.querySelectorAll('#preview-content img').forEach(img => {
+      if (img.src.includes('profile.png')) img.src = previewPhotoUrl;
+    });
+  }
 }
 
 // ===================================================
@@ -236,6 +241,11 @@ async function saveChanges() {
       textChanged    = false;
     }
 
+    if (previewPhotoUrl) {
+      URL.revokeObjectURL(previewPhotoUrl);
+      previewPhotoUrl = null;
+    }
+    document.getElementById('btn-restore-photo').style.display = 'none';
     updateSaveButton();
     setStatus(
       'Modifiche salvate. La GitHub Action aggiornerà il sito automaticamente (1-2 minuti).',
@@ -257,6 +267,7 @@ let confirmedProfileBlob = null;
 let confirmedOgBlob      = null;
 let previewProfileBlob   = null;
 let previewOgBlob        = null;
+let previewPhotoUrl      = null; // object URL del blob confermato, per l'anteprima
 
 function cropToCircle(img) {
   const srcSize = Math.min(img.naturalWidth, img.naturalHeight);
@@ -333,12 +344,29 @@ function cancelPhoto() {
 }
 
 function confirmPhoto() {
+  if (previewPhotoUrl) URL.revokeObjectURL(previewPhotoUrl);
+  previewPhotoUrl      = URL.createObjectURL(previewProfileBlob);
   confirmedProfileBlob = previewProfileBlob;
   confirmedOgBlob      = previewOgBlob;
   previewProfileBlob   = null;
   previewOgBlob        = null;
   photoChanged         = true;
   document.getElementById('photo-modal').classList.remove('open');
+  document.getElementById('btn-restore-photo').style.display = '';
+  updatePreview();
+  updateSaveButton();
+}
+
+function restorePhoto() {
+  if (previewPhotoUrl) {
+    URL.revokeObjectURL(previewPhotoUrl);
+    previewPhotoUrl = null;
+  }
+  confirmedProfileBlob = null;
+  confirmedOgBlob      = null;
+  photoChanged         = false;
+  document.getElementById('btn-restore-photo').style.display = 'none';
+  updatePreview();
   updateSaveButton();
 }
 
