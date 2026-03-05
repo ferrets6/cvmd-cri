@@ -1,1 +1,4 @@
 cv-prompt.txt
+.env.local
+_dev/
+.claude/settings.local.json
