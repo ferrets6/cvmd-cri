@@ -1,0 +1,17 @@
+---
+---
+@import "jekyll-theme-cayman";
+
+@media print {
+  /* Hide the big Cayman header (name banner + buttons) */
+  .page-header { display: none; }
+
+  /* Reasonable print font size */
+  body { font-size: 11pt; }
+
+  /* Don't print the URL after every hyperlink */
+  a[href]::after { content: none !important; }
+
+  /* Honour page-break divs */
+  .page-break { page-break-after: always; }
+}

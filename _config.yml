@@ -1,0 +1,23 @@
+theme: jekyll-theme-cayman
+title: "Dott.ssa Cristina Pellegrini"
+description: "Psicologa Clinica a Fabriano"
+url: "https://marcodellemarche.github.io/cri"
+author: "Dott.ssa Cristina Pellegrini"
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+defaults:
+  - scope:
+      path: ""
+    values:
+      description: "Psicologa Clinica a Fabriano"
+      image:
+        path: /assets/og-image.png
+        width: 1200
+        height: 630
+        alt: "Dott.ssa Cristina Pellegrini"
+exclude:
+  - SETUP.md
+  - setup.py
+  - cv-prompt.txt
+  - "*.pdf"
