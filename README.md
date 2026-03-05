@@ -8,6 +8,15 @@
 
 📎 Scarica questo CV [in formato PDF](https://github.com/ferrets6/cvmd-cri/releases/download/latest/cristina-pellegrini-cv.pdf)
 
+## 📍 Studio
+
+**Studio Dott.ssa Pellegrini, Psicologa**
+Piazza Garibaldi, 4 — Primo piano
+60044 Fabriano (AN)
+Tel: 379 3361528
+
+<div class="page-break"></div>
+
 ## 🧩 Attività professionale
 
 **Psicologa Clinica** @ [Studio Dott.ssa Pellegrini, Psicologa](https://www.miodottore.it/cristina-pellegrini-4/psicologo/fabriano) *(in corso)*
@@ -22,21 +31,11 @@ Esercizio della professione in studio privato a Fabriano (AN), con presa in cari
 
 ***Aree di intervento:*** ansia, attacchi di panico, depressione, disturbi dell'umore, disturbi di personalità, PTSD, lutto, difficoltà relazionali, dipendenza affettiva, disturbi psicosomatici, DSA, sostegno alla genitorialità.
 
-
-## 📍 Studio
-
-**Studio Dott.ssa Pellegrini, Psicologa**
-Piazza Garibaldi, 4 — Primo piano
-60044 Fabriano (AN)
-Tel: 379 3361528
-
-<div class="page-break"></div>
-
-Psicologa in libera professione presso KOS CARE, centro ambulatoriale Santo Stefano di Fabriano (AN)
+**Psicologa in libera professione** presso KOS CARE, centro ambulatoriale Santo Stefano di Fabriano (AN)
 
 ## 🎓 Formazione
 
-**Specializzazione in Psicoterapia Cognitivo Interpersonale** @ [Scuola ARPCI](https://www.arpci.it) *(in conclusione)*
+**Specializzazione in Psicoterapia Cognitivo Interpersonale** @ [Scuola ARPCI](https://www.arpci.it) *(in corso)*
 
 Percorso di specializzazione quadriennale in psicoterapia ad orientamento cognitivo interpersonale, presso la scuola ARPCI di Roma.
 
