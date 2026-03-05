@@ -19,7 +19,7 @@ const BRANCH     = 'main';
 // SICUREZZA: se il repo e' privato, questo file non e' pubblicamente visibile.
 // Se il repo e' pubblico, l'hash e' visibile ma SHA-256 di una password forte
 // e' computazionalmente inattaccabile tramite brute force.
-const PASSWORD_HASH = 'ac12c9b6379fecc1b808eee44cd66ef558b11a35c03510c911f4777ff7f93cc2';
+const PASSWORD_HASH = '__EDITOR_PASSWORD_HASH__';
 
 // ===================================================
 // AUTENTICAZIONE
