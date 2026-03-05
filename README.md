@@ -1,4 +1,4 @@
-# Dott.ssa Cristina Pellegrini
+# Dott.ssa Cristina Pellegrini 
 
 <img src="assets/profile.png" alt="Foto profilo" width="200" align="right" style="border-radius: 50%; object-fit: cover;"/>
 
