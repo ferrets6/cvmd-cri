@@ -29,7 +29,26 @@
     <span id="toolbar-title">Editor CV — Dott.ssa Cristina Pellegrini</span>
     <button class="btn-tool" id="btn-legend"  onclick="toggleLegend()">Guida</button>
     <button class="btn-tool" id="btn-preview" onclick="togglePreview()">Anteprima</button>
-    <button class="btn-tool btn-save"          onclick="saveChanges()">Salva e pubblica</button>
+    <button class="btn-tool"                  onclick="document.getElementById('photo-input').click()">Cambia foto</button>
+    <button class="btn-tool btn-save" id="btn-save" onclick="saveChanges()">Salva e pubblica</button>
+  </div>
+
+  <!-- Photo input (hidden) -->
+  <input type="file" id="photo-input" accept="image/*" style="display:none" onchange="onPhotoSelected(event)">
+
+  <!-- Photo preview modal -->
+  <div id="photo-modal">
+    <div class="photo-modal-box">
+      <h2>Cambia foto profilo</h2>
+      <div id="photo-preview-wrap">
+        <canvas id="photo-preview-canvas"></canvas>
+      </div>
+      <p class="photo-modal-hint">La foto verrà ritagliata in cerchio. L'immagine di anteprima social (og-image) verrà aggiornata automaticamente.</p>
+      <div class="photo-modal-actions">
+        <button class="btn-tool" onclick="cancelPhoto()">Annulla</button>
+        <button class="btn-tool btn-save" onclick="confirmPhoto()">Conferma foto</button>
+      </div>
+    </div>
   </div>
 
   <!-- GitHub Token bar -->
