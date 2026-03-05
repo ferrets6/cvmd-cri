@@ -64,48 +64,24 @@ python setup.py --prompt
 
 The repo includes a browser-based Markdown editor (`edit.html`) that lets you update your CV without touching Git. It loads `README.md` directly from GitHub, lets you edit it with a live preview, and saves it back via the GitHub API (triggering the Action automatically).
 
-### First-time setup
+### Setup: create a GitHub Personal Access Token
 
-**1. Set the editor password**
+Go to *GitHub* → your profile photo → *Settings* → *Developer settings* → *Personal access tokens* → *Fine-grained tokens* → **Generate new token**:
 
-The editor is protected by a password that is stored as a GitHub repository secret and injected at build time — it is never committed to the repo.
+- **Resource owner:** your account
+- **Repository access:** Only select repositories → `cvmd-cri`
+- **Repository permissions → Contents:** `Read and write`
 
-Go to your repo's *Settings* → *Secrets and variables* → *Actions* → *Repository secrets* → **New repository secret**:
+Copy the token — you will only see it once.
 
-- Name: `EDITOR_PASSWORD`
-- Value: the password you want to use to access the editor
+### Using the editor
 
-**2. Create a GitHub Personal Access Token**
+Open `https://<your-pages-url>/edit.html`. Paste the token when prompted and click **Entra**.
 
-The editor needs a token to save changes back to the repo. Go to *GitHub* → your profile photo → *Settings* → *Developer settings* → *Personal access tokens* → *Fine-grained tokens* → **Generate new token**:
-
-- **Repository access:** only this repo
-- **Permissions → Contents:** `Read and write`
-
-Copy the token — you will only see it once. Paste it into the "Token GitHub" field inside the editor each time you open a session (it is stored only in `sessionStorage`, never sent anywhere other than the GitHub API).
-
-**3. Deploy**
-
-Commit and push. The Action will inject the password hash into `edit.js` at build time. Once deployed, the editor is available at `https://<your-pages-url>/edit.html`.
-
-### Changing the password
-
-Update the `EDITOR_PASSWORD` secret and push any commit (or re-run the Action manually from the *Actions* tab) to redeploy.
+The token is stored in `sessionStorage` for the duration of the browser session — you won't be asked again until you close the tab. It is never sent anywhere other than the GitHub API.
 
 ### Local development
 
-To test the editor locally:
-
-1. Create a `.env.local` file in the repo root (it is gitignored):
-   ```
-   EDITOR_PASSWORD=yourpassword
-   ```
-2. Run the dev server:
-   ```bash
-   bash dev-serve.sh
-   ```
-3. Open `http://localhost:8000/edit.html`.
-
-The script builds a temporary `_dev/` folder (gitignored) with the hash injected, and serves from there. The source files are never modified.
+Open `edit.html` directly in a browser (no server needed — all requests go to the external GitHub API).
 
 That's it, see ya! 👋

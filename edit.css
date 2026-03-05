@@ -24,7 +24,7 @@ body {
   border-radius: 12px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.12);
   width: 100%;
-  max-width: 400px;
+  max-width: 480px;
   text-align: center;
 }
 
@@ -109,33 +109,27 @@ body {
 .btn-tool.btn-save:hover { background: #22863a; }
 .btn-tool.btn-save:disabled { background: #94d3a2; border-color: #94d3a2; cursor: not-allowed; }
 
-/* Token bar */
-#token-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.45rem 1rem;
-  background: #fff8c5;
-  border-bottom: 1px solid #d4b800;
+/* Token help */
+.token-help {
+  margin-top: 1.5rem;
+  text-align: left;
+  background: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  padding: 1rem 1.2rem;
   font-size: 0.82rem;
-  flex-shrink: 0;
+  color: #444;
 }
-#token-bar label { white-space: nowrap; color: #5a4800; font-weight: 600; }
-#token-bar input {
-  flex: 1;
-  min-width: 0;
-  padding: 0.3rem 0.6rem;
-  border: 1px solid #c8a800;
-  border-radius: 5px;
-  font-size: 0.82rem;
-  font-family: monospace;
-  background: #fffef0;
-  outline: none;
+.token-help-title {
+  font-weight: 600;
+  color: #24292e;
+  margin-bottom: 0.5rem;
 }
-#token-bar input:focus { border-color: #0366d6; }
-#token-bar .token-hint { color: #6a5500; font-size: 0.75rem; white-space: nowrap; }
-#token-bar.token-ok { background: #dcffe4; border-color: #34d058; }
-#token-bar.token-ok label { color: #1a6b2a; }
+.token-help ol {
+  padding-left: 1.2rem;
+  line-height: 1.7;
+}
+.token-help li { margin-bottom: 0.2rem; }
 
 /* Work area */
 #work-area {

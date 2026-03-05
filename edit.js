@@ -6,88 +6,101 @@ const REPO_NAME  = 'cvmd-cri';
 const FILE_PATH  = 'README.md';
 const BRANCH     = 'main';
 
-// Hash SHA-256 della password di accesso.
-//
-// Per impostare la tua password:
-//   1. Scegli una password
-//   2. Calcola il suo SHA-256 in esadecimale:
-//      - Linux/Mac:  echo -n "latuapassword" | sha256sum
-//      - Windows PS: (Get-FileHash -Algorithm SHA256 -InputStream ([IO.MemoryStream]::new([Text.Encoding]::UTF8.GetBytes("latuapassword")))).Hash.ToLower()
-//      - Online:     cerca "sha256 online calculator" e incolla la password
-//   3. Sostituisci il valore qui sotto con l'hash ottenuto (stringa di 64 caratteri hex)
-//
-// SICUREZZA: se il repo e' privato, questo file non e' pubblicamente visibile.
-// Se il repo e' pubblico, l'hash e' visibile ma SHA-256 di una password forte
-// e' computazionalmente inattaccabile tramite brute force.
-const PASSWORD_HASH = '__EDITOR_PASSWORD_HASH__';
-
 // ===================================================
-// AUTENTICAZIONE
+// AUTENTICAZIONE TOKEN GITHUB
 // ===================================================
-async function sha256(text) {
-  const buf = await crypto.subtle.digest(
-    'SHA-256',
-    new TextEncoder().encode(text)
+async function checkToken(token) {
+  const res = await fetch(
+    `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}`,
+    {
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/vnd.github+json'
+      }
+    }
   );
-  return Array.from(new Uint8Array(buf))
-    .map(b => b.toString(16).padStart(2, '0'))
-    .join('');
+
+  if (res.status === 401) {
+    const data = await res.json().catch(() => ({}));
+    const msg = (data.message || '').toLowerCase();
+    if (msg.includes('expired') || msg.includes('token has expired')) {
+      throw new Error('scaduto');
+    }
+    throw new Error('non valido o scaduto');
+  }
+
+  if (!res.ok) {
+    throw new Error('non valido o scaduto');
+  }
+
+  const data = await res.json();
+  if (!data.permissions || !data.permissions.push) {
+    throw new Error(`mancano i permessi di scrittura sul repo ${REPO_NAME}`);
+  }
+
+  return true;
 }
 
-async function checkPassword() {
-  const input = document.getElementById('password-input');
+function showAuthError(msg) {
   const errEl = document.getElementById('auth-error');
+  errEl.textContent = msg;
+  errEl.style.display = 'block';
+}
+
+function enterEditor() {
+  document.getElementById('auth-gate').style.display = 'none';
+  document.getElementById('editor-app').style.display = 'flex';
+  loadReadme();
+}
+
+async function loginWithToken() {
+  const input = document.getElementById('token-input');
   const btn   = document.getElementById('auth-btn');
 
-  if (!input.value) return;
+  const token = input.value.trim();
+  if (!token) return;
+
   btn.disabled    = true;
   btn.textContent = 'Verifica...';
+  document.getElementById('auth-error').style.display = 'none';
 
-  const hash = await sha256(input.value);
-
-  if (hash === PASSWORD_HASH) {
-    document.getElementById('auth-gate').style.display = 'none';
-    document.getElementById('editor-app').style.display = 'flex';
-    // Ripristina token dalla sessione (se era stato salvato in precedenza)
-    const saved = sessionStorage.getItem('gh_editor_token');
-    if (saved) {
-      document.getElementById('github-token').value = saved;
-      markTokenBar(true);
-    }
-    loadReadme();
-  } else {
-    errEl.style.display = 'block';
-    input.value = '';
-    input.focus();
+  try {
+    await checkToken(token);
+    sessionStorage.setItem('gh_editor_token', token);
+    enterEditor();
+  } catch (err) {
+    showAuthError('Token ' + err.message + '.');
     btn.disabled    = false;
-    btn.textContent = 'Accedi';
+    btn.textContent = 'Entra';
   }
 }
+
+async function initAuth() {
+  const saved = sessionStorage.getItem('gh_editor_token');
+  if (!saved) return;
+
+  const btn = document.getElementById('auth-btn');
+  btn.disabled    = true;
+  btn.textContent = 'Verifica token in sessione...';
+
+  try {
+    await checkToken(saved);
+    enterEditor();
+  } catch (err) {
+    sessionStorage.removeItem('gh_editor_token');
+    showAuthError('Sessione non valida: token ' + err.message + '. Inserisci di nuovo il token.');
+    btn.disabled    = false;
+    btn.textContent = 'Entra';
+  }
+}
+
+document.addEventListener('DOMContentLoaded', initAuth);
 
 // ===================================================
 // GITHUB TOKEN
 // ===================================================
-function persistToken() {
-  const token = document.getElementById('github-token').value.trim();
-  if (token) {
-    sessionStorage.setItem('gh_editor_token', token);
-    markTokenBar(true);
-  } else {
-    sessionStorage.removeItem('gh_editor_token');
-    markTokenBar(false);
-  }
-  updateSaveButton();
-}
-
-function markTokenBar(ok) {
-  document.getElementById('token-bar').classList.toggle('token-ok', ok);
-}
-
 function getToken() {
-  return (
-    sessionStorage.getItem('gh_editor_token') ||
-    document.getElementById('github-token').value.trim()
-  );
+  return sessionStorage.getItem('gh_editor_token') || '';
 }
 
 // ===================================================

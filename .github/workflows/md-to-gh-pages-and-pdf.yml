@@ -30,13 +30,6 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
-      - name: Inject password hash
-        env:
-          EDITOR_PASSWORD: ${{ secrets.EDITOR_PASSWORD }}
-        run: |
-          HASH=$(printf '%s' "${EDITOR_PASSWORD}" | sha256sum | cut -d' ' -f1)
-          sed -i "s/__EDITOR_PASSWORD_HASH__/${HASH}/" edit.js
-
       - name: Build with Jekyll
         uses: actions/jekyll-build-pages@v1
         with:

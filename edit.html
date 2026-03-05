@@ -13,11 +13,23 @@
 <div id="auth-gate">
   <div class="auth-box">
     <h1>Editor CV</h1>
-    <p>Inserisci la password per accedere all'editor.</p>
-    <input type="password" id="password-input" placeholder="Password"
-           onkeydown="if(event.key==='Enter') checkPassword()">
-    <button class="btn-primary" id="auth-btn" onclick="checkPassword()">Accedi</button>
-    <div id="auth-error">Password errata. Riprova.</div>
+    <p>Inserisci il tuo Personal Access Token GitHub per accedere all'editor.</p>
+    <input type="text" id="token-input" placeholder="github_pat_..."
+           autocomplete="off" spellcheck="false"
+           onkeydown="if(event.key==='Enter') loginWithToken()">
+    <button class="btn-primary" id="auth-btn" onclick="loginWithToken()">Entra</button>
+    <div id="auth-error"></div>
+
+    <div class="token-help">
+      <p class="token-help-title">Come creare il token:</p>
+      <ol>
+        <li>GitHub → <strong>Settings → Developer settings → Personal access tokens → Fine-grained tokens</strong></li>
+        <li>Clicca <strong>Generate new token</strong></li>
+        <li>In <em>Resource owner</em> seleziona il tuo account; in <em>Repository access</em> scegli <strong>Only select repositories</strong> e seleziona <strong>cvmd-cri</strong></li>
+        <li>In <em>Repository permissions → Contents</em> imposta <strong>Read and write</strong></li>
+        <li>Genera il token e incollalo qui sopra</li>
+      </ol>
+    </div>
   </div>
 </div>
 
@@ -50,15 +62,6 @@
         <button class="btn-tool btn-save" onclick="confirmPhoto()">Conferma foto</button>
       </div>
     </div>
-  </div>
-
-  <!-- GitHub Token bar -->
-  <div id="token-bar">
-    <label for="github-token">Token GitHub:</label>
-    <input type="password" id="github-token"
-           placeholder="Incolla qui il tuo Personal Access Token (salvato solo in questa sessione del browser)"
-           onchange="persistToken()">
-    <span class="token-hint">Serve un token con permesso <strong>contents: write</strong> sul repo</span>
   </div>
 
   <!-- Work area: editor + preview -->
