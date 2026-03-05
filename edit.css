@@ -107,6 +107,7 @@ body {
 .btn-tool.active   { background: #0366d6; border-color: #0366d6; color: white; }
 .btn-tool.btn-save { background: #2ea44f; border-color: #2ea44f; color: white; }
 .btn-tool.btn-save:hover { background: #22863a; }
+.btn-tool.btn-save:disabled { background: #94d3a2; border-color: #94d3a2; cursor: not-allowed; }
 
 /* Token bar */
 #token-bar {
@@ -254,6 +255,59 @@ body {
 }
 .legend-item span { color: #555; }
 .legend-item.full { grid-column: 1 / -1; flex-direction: column; gap: 0.2rem; }
+
+/* Photo modal */
+#photo-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+}
+#photo-modal.open { display: flex; }
+
+.photo-modal-box {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+  padding: 2rem;
+  max-width: 360px;
+  width: 100%;
+  text-align: center;
+}
+.photo-modal-box h2 { font-size: 1.15rem; margin-bottom: 1.25rem; color: #24292e; }
+
+#photo-preview-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+#photo-preview-canvas {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 3px solid #e1e4e8;
+}
+
+.photo-modal-hint {
+  font-size: 0.8rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+.photo-modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+.photo-modal-actions .btn-tool {
+  border-color: #555;
+  color: #24292e;
+  background: white;
+}
+.photo-modal-actions .btn-tool:hover { background: #f6f8fa; }
 
 /* Status bar */
 #status-bar {
