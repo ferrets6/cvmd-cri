@@ -47,7 +47,14 @@ function showAuthError(msg) {
   errEl.style.display = 'block';
 }
 
+function showAuthGate(errorMsg) {
+  document.getElementById('loading-gate').style.display = 'none';
+  document.getElementById('auth-gate').style.display = 'flex';
+  if (errorMsg) showAuthError(errorMsg);
+}
+
 function enterEditor() {
+  document.getElementById('loading-gate').style.display = 'none';
   document.getElementById('auth-gate').style.display = 'none';
   document.getElementById('editor-app').style.display = 'flex';
   loadReadme();
@@ -77,24 +84,39 @@ async function loginWithToken() {
 
 async function initAuth() {
   const saved = sessionStorage.getItem('gh_editor_token');
-  if (!saved) return;
-
-  const btn = document.getElementById('auth-btn');
-  btn.disabled    = true;
-  btn.textContent = 'Verifica token in sessione...';
-
+  if (!saved) {
+    showAuthGate();
+    return;
+  }
   try {
     await checkToken(saved);
     enterEditor();
   } catch (err) {
     sessionStorage.removeItem('gh_editor_token');
-    showAuthError('Sessione non valida: token ' + err.message + '. Inserisci di nuovo il token.');
-    btn.disabled    = false;
-    btn.textContent = 'Entra';
+    showAuthGate('Sessione non valida: token ' + err.message + '. Inserisci di nuovo il token.');
   }
 }
 
 document.addEventListener('DOMContentLoaded', initAuth);
+
+// ===================================================
+// HAMBURGER MENU
+// ===================================================
+function toggleMenu() {
+  document.getElementById('toolbar-menu').classList.toggle('open');
+}
+
+function closeMenu() {
+  document.getElementById('toolbar-menu').classList.remove('open');
+}
+
+document.addEventListener('click', function(e) {
+  const menu = document.getElementById('toolbar-menu');
+  const btn  = document.getElementById('btn-menu');
+  if (menu && !menu.contains(e.target) && e.target !== btn) {
+    menu.classList.remove('open');
+  }
+});
 
 // ===================================================
 // GITHUB TOKEN
@@ -138,15 +160,128 @@ async function loadReadme() {
 // ===================================================
 // ANTEPRIMA
 // ===================================================
-let previewVisible = false;
-let previewTimer   = null;
+let previewVisible   = false;
+let previewFullscreen = false;
+let previewTimer     = null;
+
+function setFsBtn(isFullscreen) {
+  const btn = document.getElementById('btn-preview-fs');
+  if (window.innerWidth <= 640) {
+    btn.textContent = isFullscreen ? '⤡' : '⤢';
+    btn.title       = isFullscreen ? 'Riduci' : 'Allarga';
+  } else {
+    btn.textContent = isFullscreen ? 'Riduci' : 'Allarga';
+    btn.title       = '';
+  }
+}
+
+function setSplit(pct) {
+  pct = Math.max(10, Math.min(90, pct));
+  if (Math.abs(pct - 50) < 2) pct = 50;
+  document.getElementById('editor-pane').style.flex = `0 0 ${pct}%`;
+  sessionStorage.setItem('editor_split', pct);
+}
 
 function togglePreview() {
   previewVisible = !previewVisible;
-  document.getElementById('preview-pane').classList.toggle('hidden', !previewVisible);
+  const pane    = document.getElementById('preview-pane');
+  const resizer = document.getElementById('preview-resizer');
+
+  pane.classList.toggle('hidden', !previewVisible);
   document.getElementById('btn-preview').classList.toggle('active', previewVisible);
-  if (previewVisible) updatePreview();
+
+  if (previewVisible) {
+    const isMobile = window.innerWidth <= 640;
+    const previewScroll = document.getElementById('preview-scroll');
+    if (isMobile) {
+      previewFullscreen = true;
+      document.getElementById('editor-pane').style.display = 'none';
+      resizer.style.display = 'none';
+      previewScroll.classList.add('preview-centered');
+      setFsBtn(true);
+    } else {
+      previewFullscreen = false;
+      document.getElementById('editor-pane').style.display = '';
+      resizer.style.display = '';
+      previewScroll.classList.remove('preview-centered');
+      setFsBtn(false);
+      const saved = parseFloat(sessionStorage.getItem('editor_split') || '50');
+      setSplit(saved);
+    }
+    updatePreview();
+  } else {
+    previewFullscreen = false;
+    document.getElementById('editor-pane').style.display = '';
+    document.getElementById('editor-pane').style.flex = '';
+    document.getElementById('preview-scroll').classList.remove('preview-centered');
+    resizer.style.display = 'none';
+  }
 }
+
+function togglePreviewFullscreen() {
+  previewFullscreen = !previewFullscreen;
+  const editorPane    = document.getElementById('editor-pane');
+  const resizer       = document.getElementById('preview-resizer');
+  const previewScroll = document.getElementById('preview-scroll');
+
+  if (previewFullscreen) {
+    editorPane.style.display = 'none';
+    resizer.style.display = 'none';
+    previewScroll.classList.add('preview-centered');
+    setFsBtn(true);
+  } else {
+    editorPane.style.display = '';
+    resizer.style.display = '';
+    previewScroll.classList.remove('preview-centered');
+    setFsBtn(false);
+    const saved = parseFloat(sessionStorage.getItem('editor_split') || '50');
+    setSplit(saved);
+  }
+}
+
+// Resize drag
+(function () {
+  const resizer = document.getElementById('preview-resizer');
+  let dragging = false;
+
+  function startDrag(e) {
+    dragging = true;
+    resizer.classList.add('dragging');
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    if (e.cancelable) e.preventDefault();
+  }
+
+  function onDrag(e) {
+    if (!dragging) return;
+    if (e.cancelable) e.preventDefault();
+    const workArea = document.getElementById('work-area');
+    const rect = workArea.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const pct = ((clientX - rect.left) / rect.width) * 100;
+    if (Math.abs(pct - 50) < 3) {
+      resizer.classList.add('snap');
+    } else {
+      resizer.classList.remove('snap');
+    }
+    setSplit(pct);
+  }
+
+  function stopDrag() {
+    if (!dragging) return;
+    dragging = false;
+    resizer.classList.remove('dragging', 'snap');
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+  }
+
+  resizer.addEventListener('mousedown', startDrag);
+  resizer.addEventListener('touchstart', startDrag, { passive: false });
+  document.addEventListener('mousemove', onDrag);
+  document.addEventListener('touchmove', onDrag, { passive: false });
+  document.addEventListener('mouseup', stopDrag);
+  document.addEventListener('touchend', stopDrag);
+})();
 
 function onEditorInput() {
   textChanged = true;
@@ -175,6 +310,7 @@ let legendVisible = false;
 function toggleLegend() {
   legendVisible = !legendVisible;
   document.getElementById('legend-section').classList.toggle('open', legendVisible);
+  document.getElementById('btn-legend-toggle').textContent = legendVisible ? '✕' : '▲';
   document.getElementById('btn-legend').classList.toggle('active', legendVisible);
 }
 
@@ -423,10 +559,25 @@ async function uploadFileToGitHub(path, blob, message) {
 // ===================================================
 // UTILITA'
 // ===================================================
+let toastTimer = null;
+
 function setStatus(msg, type) {
-  const bar = document.getElementById('status-bar');
-  bar.textContent = msg;
-  bar.className   = type || '';
+  const toast = document.getElementById('toast');
+  clearTimeout(toastTimer);
+
+  if (!msg) {
+    toast.style.display = 'none';
+    return;
+  }
+
+  toast.textContent = msg;
+  toast.className   = type || '';
+  toast.style.display = '';
+
+  if (type !== 'loading') {
+    const delay = type === 'error' ? 6000 : 4000;
+    toastTimer = setTimeout(() => { toast.style.display = 'none'; }, delay);
+  }
 }
 
 // Converte una stringa UTF-8 in Base64 (gestisce correttamente accenti e caratteri non-ASCII)

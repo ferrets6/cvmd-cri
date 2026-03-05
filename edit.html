@@ -9,8 +9,11 @@
 </head>
 <body>
 
+<!-- ===================== LOADING GATE ===================== -->
+<div id="loading-gate"></div>
+
 <!-- ===================== AUTH GATE ===================== -->
-<div id="auth-gate">
+<div id="auth-gate" style="display:none">
   <div class="auth-box">
     <h1>Editor CV</h1>
     <p>Inserisci il tuo Personal Access Token GitHub per accedere all'editor.</p>
@@ -39,10 +42,13 @@
   <!-- Toolbar -->
   <div id="toolbar">
     <span id="toolbar-title">Editor CV — Dott.ssa Cristina Pellegrini</span>
-    <button class="btn-tool" id="btn-legend"  onclick="toggleLegend()">Guida</button>
-    <button class="btn-tool" id="btn-preview" onclick="togglePreview()">Anteprima</button>
-    <button class="btn-tool" id="btn-change-photo" onclick="document.getElementById('photo-input').click()">Cambia foto</button>
-    <button class="btn-tool" id="btn-restore-photo" style="display:none" onclick="restorePhoto()">Ripristina foto</button>
+    <div id="toolbar-menu">
+      <button class="btn-tool" id="btn-legend"  onclick="toggleLegend(); closeMenu()">Guida</button>
+      <button class="btn-tool" id="btn-preview" onclick="togglePreview(); closeMenu()">Anteprima</button>
+      <button class="btn-tool" id="btn-change-photo" onclick="document.getElementById('photo-input').click(); closeMenu()">Cambia foto</button>
+      <button class="btn-tool" id="btn-restore-photo" style="display:none" onclick="restorePhoto(); closeMenu()">Ripristina foto</button>
+    </div>
+    <button class="btn-tool" id="btn-menu" onclick="toggleMenu()">☰</button>
     <button class="btn-tool btn-save" id="btn-save" onclick="saveChanges()">Salva e pubblica</button>
   </div>
 
@@ -71,13 +77,26 @@
                 placeholder="Caricamento in corso..."
                 oninput="onEditorInput()"></textarea>
     </div>
+    <div id="preview-resizer" style="display:none"></div>
     <div id="preview-pane" class="hidden">
-      <div id="preview-content"></div>
+      <div id="preview-header">
+        <span>Anteprima</span>
+        <button class="btn-tool" id="btn-preview-fs" onclick="togglePreviewFullscreen()">Schermo intero</button>
+        <button class="btn-tool" onclick="togglePreview()">✕</button>
+      </div>
+      <div id="preview-scroll">
+        <div id="preview-content"></div>
+      </div>
     </div>
   </div>
 
-  <!-- Legend (collapsible) -->
+  <!-- Legend (always visible at bottom) -->
   <div id="legend-section">
+    <div id="legend-header">
+      <span>Guida Markdown</span>
+      <button class="btn-tool" id="btn-legend-toggle" onclick="toggleLegend()">▲</button>
+    </div>
+    <div id="legend-body">
     <div id="legend-grid">
 
       <div class="legend-group-title">Titoli</div>
@@ -115,10 +134,11 @@
       </div>
 
     </div>
+    </div>
   </div>
 
-  <!-- Status bar -->
-  <div id="status-bar">Pronto.</div>
+  <!-- Toast notification -->
+  <div id="toast" style="display:none"></div>
 
 </div>
 
