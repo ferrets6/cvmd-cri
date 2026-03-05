@@ -6,7 +6,7 @@
 
 [Email](mailto:cri@gmail.com) / [MioDottore](https://www.miodottore.it/cristina-pellegrini-4/psicologo/fabriano) / [LinkedIn](https://www.linkedin.com/in/cristina-pellegrini-316082111)
 
-📎 Scarica questo CV [in formato PDF](https://github.com/marcodellemarche/cri/releases/download/latest/cristina-pellegrini-cv.pdf)
+📎 Scarica questo CV [in formato PDF](https://github.com/ferrets6/cvmd-cri/releases/download/latest/cristina-pellegrini-cv.pdf)
 
 ## 🧩 Attività professionale
 
