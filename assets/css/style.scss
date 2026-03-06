@@ -2,6 +2,18 @@
 ---
 @import "jekyll-theme-cayman";
 
+.page-header {
+  padding: 3rem 6rem;
+
+  @media screen and (max-width: 42em) {
+    padding: 1.5rem 1rem;
+  }
+}
+
+.project-tagline {
+  margin-bottom: 0;
+}
+
 @media print {
   /* Hide the big Cayman header (name banner + buttons) */
   .page-header { display: none; }
