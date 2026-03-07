@@ -69,6 +69,15 @@ jobs:
         run: |
           sed -i "s|📎 Scarica questo CV \[in formato PDF\]([^)]*)|🌐 Consulta il CV a \[questo link\](${PAGE_URL%/})|" README.md
 
+      - name: Decode obfuscated email links for PDF
+        run: |
+          node -e "
+            const fs = require('fs');
+            let c = fs.readFileSync('README.md', 'utf8');
+            c = c.replace(/x-email:([A-Za-z0-9+/=]+)/g, (_, b64) => 'mailto:' + Buffer.from(b64, 'base64').toString());
+            fs.writeFileSync('README.md', c);
+          "
+
       - name: Convert to PDF
         env:
           PAGE_URL: ${{ needs.deploy.outputs.url }}

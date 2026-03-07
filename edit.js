@@ -146,7 +146,8 @@ async function loadReadme() {
 
     const data = await res.json();
     currentFileSha = data.sha;
-    const content = base64ToUtf8(data.content.replace(/\n/g, ''));
+    const raw = base64ToUtf8(data.content.replace(/\n/g, ''));
+    const content = raw.replace(/x-email:([A-Za-z0-9+/=]+)/g, (_, b64) => 'mailto:' + atob(b64));
     document.getElementById('markdown-input').value = content;
     updatePreview();
     textChanged = false;
@@ -363,7 +364,8 @@ async function saveChanges() {
         return;
       }
       const token   = getToken();
-      const content = document.getElementById('markdown-input').value;
+      const raw     = document.getElementById('markdown-input').value;
+      const content = raw.replace(/mailto:([^\s)"]+)/g, (_, email) => 'x-email:' + btoa(email));
       const res = await fetch(
         `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`,
         {

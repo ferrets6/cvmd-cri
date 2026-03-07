@@ -4,7 +4,7 @@
 
 *Psicologa clinica con formazione in Psicoterapia Cognitivo Interpersonale e specializzazione nela valutazione e trattamento neuropsicologico dei Disturbi Specifici dell'Apprendimento. Offre percorsi di sostegno psicologico personalizzati per bambini, adolescenti e adulti, con attenzione al benessere della persona nella sua interezza.* 🧠
 
-[Email](mailto:pellegrinicristina1992@gmail.com) / [MioDottore](https://www.miodottore.it/cristina-pellegrini-4/psicologo/fabriano) / [LinkedIn](https://www.linkedin.com/in/cristina-pellegrini-316082111)
+[Email](x-email:cGVsbGVncmluaWNyaXN0aW5hMTk5MkBnbWFpbC5jb20=) / [MioDottore](https://www.miodottore.it/cristina-pellegrini-4/psicologo/fabriano) / [LinkedIn](https://www.linkedin.com/in/cristina-pellegrini-316082111)
 
 📎 Scarica questo CV [in formato PDF](https://github.com/ferrets6/cvmd-cri/releases/download/latest/cristina-pellegrini-cv.pdf)
 
